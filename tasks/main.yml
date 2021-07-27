@@ -15,7 +15,8 @@
   become: true
   register: key_result
 
-- debug:
+- name: "Debug: Result of adding RPM key."
+  debug:
     var: key_result
     verbosity: 2
 
@@ -28,7 +29,8 @@
     mode: 0755
   register: repo_path
 
-- debug:
+- name: "Debug: Result of creating repo config path."
+  debug:
     var: repo_path
     verbosity: 2
 
@@ -45,6 +47,7 @@
   register: repo_result
   when: not mono_repofile_result.stat.exists
 
-- debug:
+- name: "Debug: Result of installing Mono repo."
+  debug:
     var: repo_result
     verbosity: 2

@@ -2,8 +2,9 @@
 
 galaxy_info:
   role_name: repo_mono
+  namespace: deekayen
   author: David Norman
-  description: Mono repository for RHEL/CentOS.
+  description: Add Mono Cross platform, open source .NET framework repository for RHEL/CentOS.
 
   github_branch: main
   issue_tracker_url: https://github.com/deekayen/ansible-role-repo-mono/issues
@@ -19,6 +20,7 @@ galaxy_info:
 
   galaxy_tags:
     - packaging
+    - microsoft
     - mono
     - repository
     - repo
