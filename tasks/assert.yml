@@ -1,0 +1,19 @@
+---
+- name: Assert the host is EL 7 or 8.
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.os_family == 'RedHat'
+      - ansible_facts.distribution_major_version in ['7', '8']
+    fail_msg: >-
+      The Mono Project only published centos7 and centos8 repositories, got
+      {{ ansible_facts.distribution }} {{ ansible_facts.distribution_major_version }}.
+    quiet: true
+
+- name: Assert the Mono URLs are HTTP(S).
+  ansible.builtin.assert:
+    that:
+      - mono_base_url is match('^https?://')
+      - mono_repo_gpg_key_url is match('^https?://')
+      - mono_rpm_key_url is match('^https?://')
+    fail_msg: "mono_base_url, mono_repo_gpg_key_url, and mono_rpm_key_url must be http(s) URLs."
+    quiet: true

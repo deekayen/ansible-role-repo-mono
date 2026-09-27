@@ -1,0 +1,26 @@
+---
+argument_specs:
+  main:
+    short_description: Add the Mono Project repository on EL 7 and 8.
+    description:
+      - Imports the Mono Project signing key and adds its yum repository.
+        The Mono Project only published centos7 and centos8 repositories.
+    author:
+      - David Norman
+    options:
+      mono_base_url:
+        type: str
+        default: "https://download.mono-project.com/repo/centos{{ ansible_facts.distribution_major_version }}-stable/"
+        description: Base URL of the Mono yum repository.
+      mono_repo_gpg_key_url:
+        type: str
+        default: https://download.mono-project.com/repo/xamarin.gpg
+        description: GPG key URL written into the repository definition.
+      mono_repofile_path:
+        type: path
+        default: "/etc/yum.repos.d/mono-centos{{ ansible_facts.distribution_major_version }}-stable.repo"
+        description: Path of the repository file; the repo is only added if it is absent.
+      mono_rpm_key_url:
+        type: str
+        default: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
+        description: URL of the Mono signing key imported into rpm.

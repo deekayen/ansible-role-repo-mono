@@ -1,53 +1,57 @@
 ---
-
 # Based on instructions at:
 # http://www.mono-project.com/download/#download-lin-centos
 
+- name: Validate role variables.
+  ansible.builtin.import_tasks: assert.yml
+  tags:
+    - always
+
 - name: Check if Mono repo is already configured.
-  stat:
+  ansible.builtin.stat:
     path: "{{ mono_repofile_path }}"
   register: mono_repofile_result
 
 - name: Add Mono RPM key.
-  rpm_key:
+  ansible.builtin.rpm_key:
     key: "{{ mono_rpm_key_url }}"
     state: present
   become: true
-  register: key_result
+  register: mono_key_result
 
 - name: "Debug: Result of adding RPM key."
-  debug:
-    var: key_result
+  ansible.builtin.debug:
+    var: mono_key_result
     verbosity: 2
 
 - name: Setup /etc/yum.repos.d path.
-  file:
+  ansible.builtin.file:
     path: /etc/yum.repos.d
     state: directory
     owner: root
     group: root
-    mode: 0755
-  register: repo_path
+    mode: "0755"
+  register: mono_repo_path
 
 - name: "Debug: Result of creating repo config path."
-  debug:
-    var: repo_path
+  ansible.builtin.debug:
+    var: mono_repo_path
     verbosity: 2
 
 - name: Install Mono repo.
-  yum_repository:
-    name: "mono-centos{{ ansible_distribution_major_version }}-stable"
-    description: "mono-centos{{ ansible_distribution_major_version }}-stable"
+  ansible.builtin.yum_repository:
+    name: "mono-centos{{ ansible_facts.distribution_major_version }}-stable"
+    description: "mono-centos{{ ansible_facts.distribution_major_version }}-stable"
     baseurl: "{{ mono_base_url }}"
     gpgkey: "{{ mono_repo_gpg_key_url }}"
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     state: present
   become: true
-  register: repo_result
+  register: mono_repo_result
   when: not mono_repofile_result.stat.exists
 
 - name: "Debug: Result of installing Mono repo."
-  debug:
-    var: repo_result
+  ansible.builtin.debug:
+    var: mono_repo_result
     verbosity: 2
